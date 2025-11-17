@@ -1,6 +1,12 @@
-import sqlite3
+import psycopg2
 from config import Config
 
 def get_db():
-    conn = sqlite3.connect(Config.DATABASE_URI.replace('sqlite:///', ''))
+    conn = psycopg2.connect(
+        host=Config.DB_HOST,
+        database=Config.DB_NAME,
+        user=Config.DB_USER,
+        password=Config.DB_PASSWORD,
+        port=Config.DB_PORT
+        )
     return conn

@@ -1,12 +1,20 @@
 from db import get_db
+from psycopg2.extras import RealDictCursor
 
 def get_users():
     conn = get_db()
-    conn.row_factory = lambda c, r: dict(zip([col[0] for col in c.description], r))
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
 
-    cursor.execute("SELECT * FROM students;")
+    cursor.execute("SELECT * FROM tbl_m_users;")
     rows = cursor.fetchall()
+
     cursor.close()
     conn.close()
-    return [{"id": r["id"], "name": r["name"], "email": r["email"], "age": r["age"]} for r in rows]
+    return [
+        {
+            "userId": r["userId"],
+            "name": r["firstName"],
+            "email": r["userName"]
+        }
+        for r in rows
+    ]
